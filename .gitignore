@@ -1,0 +1,29 @@
+node_modules/
+
+# Frontend build output
+frontend/dist/
+
+# Environment and local secrets
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# Logs and runtime files
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage and tooling caches
+coverage/
+.vite/
+.cache/
+
+# Local editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
