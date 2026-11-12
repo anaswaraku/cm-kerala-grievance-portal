@@ -48,12 +48,8 @@ export default function HomePage() {
     <PortalFrame>
       {/* Hero */}
       <section className="home-hero">
-        <h1>Every Voice Deserves Action</h1>
-        <p>
-          The Kerala CM Grievance Portal empowers every citizen to submit,
-          track, and follow up on grievances directly with the Chief
-          Minister's Office — transparently and efficiently.
-        </p>
+        <h1>നിങ്ങളുടെ ശബ്ദം, നാടിന്റെ പുരോഗതി</h1>
+        <p>മുഖ്യമന്ത്രിയുടെ പൊതുജന പരാതി പരിഹാര പോർട്ടൽ</p>
         <div className="home-hero-actions">
           <Link to="/access" className="button primary">
             Submit a Grievance
@@ -76,7 +72,7 @@ export default function HomePage() {
             {statItems.map(({ key, label }) => (
               <div className="stat-card" key={key}>
                 <div className="stat-number">
-                  {stats ? stats[key]?.toLocaleString() ?? "—" : "…"}
+                  {stats ? (stats[key]?.toLocaleString() ?? "—") : "…"}
                 </div>
                 <div className="stat-label">{label}</div>
               </div>
@@ -109,12 +105,14 @@ export default function HomePage() {
         <h2 style={{ marginBottom: "1rem", color: "#0d5c42" }}>
           About the Portal
         </h2>
-        <p style={{ color: "#4b6254", lineHeight: 1.8, marginBottom: "1.5rem" }}>
+        <p
+          style={{ color: "#4b6254", lineHeight: 1.8, marginBottom: "1.5rem" }}
+        >
           The CM Kerala Grievance Portal is a digital platform connecting
           citizens directly with the Chief Minister's Office. Grievances are
           routed to the relevant state departments, tracked end-to-end, and
-          resolved with full transparency. Built as a recruitment prototype
-          for evaluation purposes.
+          resolved with full transparency. Built as a recruitment prototype for
+          evaluation purposes.
         </p>
         <Link to="/about" className="button">
           Learn More

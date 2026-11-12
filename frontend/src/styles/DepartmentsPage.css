@@ -1,0 +1,159 @@
+
+.departments-page {
+    width: 90%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.departments-header {
+    margin-bottom: 35px;
+}
+
+.departments-eyebrow {
+    color: #2563eb;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.departments-header h1 {
+    font-size: 32px;
+    color: #1f2937;
+}
+
+.departments-header > p:last-child {
+    color: #64748b;
+    line-height: 1.7;
+}
+
+/* Grid */
+.departments-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+/* Card */
+.department-card {
+    position: relative;
+    height: 260px;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #334155;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Background image */
+.department-card-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+/* Dark overlay */
+.department-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.9),
+        rgba(0, 0, 0, 0.35),
+        rgba(0, 0, 0, 0.05)
+    );
+    transition: background 0.3s ease;
+}
+
+/* Card hover effects */
+.department-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}
+
+.department-card:hover .department-card-image {
+    transform: scale(1.12);
+}
+
+/* Card content */
+.department-card-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 22px;
+    color: white;
+    z-index: 2;
+}
+
+.department-card-content h2 {
+    font-size: 21px;
+    margin: 0 0 10px;
+    color: white;
+}
+
+.department-card-content p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #f1f5f9;
+    margin-bottom: 15px;
+}
+
+/* Explore text */
+.department-explore {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #93c5fd;
+    transition: transform 0.3s ease;
+}
+
+.department-card:hover .department-explore {
+    transform: translateX(6px);
+}
+
+/* Loading and error */
+.department-message {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+}
+
+.department-error {
+    color: #dc2626;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+    .departments-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .departments-page {
+        width: 95%;
+        padding: 12px;
+    }
+
+    .departments-header h1 {
+        font-size: 26px;
+    }
+
+    .departments-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .department-card {
+        height: 230px;
+    }
+}
