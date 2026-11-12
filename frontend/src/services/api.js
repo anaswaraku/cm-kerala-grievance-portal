@@ -2,8 +2,11 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 const request = async (path, options = {}) => {
   const response = await fetch(`${API_URL}${path}`, {
-    headers: { "Content-Type": "application/json", ...options.headers },
     ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
+    },
   });
   const data = await response.json().catch(() => ({}));
   if (!response.ok) {
@@ -35,6 +38,17 @@ export const logoutRequest = (token) => request("/api/auth/logout", {
 
 
 export const getDepartments = () => request("/api/departments");
+
+// Fetch districts for dropdown
+export const getDistricts = () => request("/api/grievances/districts");
+
+// Submit grievance
+export const submitGrievance = (data, token) =>
+  request("/api/grievances", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify(data),
+  });
 
 const dashboardPath = {
   citizen: "/api/auth/dashboard/citizen",

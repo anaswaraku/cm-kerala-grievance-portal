@@ -5,6 +5,7 @@ require("dotenv").config();
 const pool = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const departmentRoutes = require("./routes/departmentRoutes");
+const grievanceRoutes = require("./routes/grievanceRoutes");
 const app = express();
 
 // Middleware
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/departments", departmentRoutes);
+app.use("/api/grievances", grievanceRoutes);
 
 // Test API
 app.get("/", (req, res) => {
