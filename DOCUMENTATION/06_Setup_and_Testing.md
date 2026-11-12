@@ -39,7 +39,7 @@ npm install
 npm run dev
 ```
 
-Set `VITE_API_URL` in the frontend environment to the backend URL. Vite normally serves the app at `http://localhost:5173`.
+Set `API_URL` in the frontend environment to the backend URL. Vite normally serves the app at `http://localhost:5173`.
 
 ## Manual test checklist
 
