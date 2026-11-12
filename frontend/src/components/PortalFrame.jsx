@@ -23,8 +23,8 @@ export default function PortalFrame({ action, children }) {
         <Link to="/contact" style={{ color: "#1c2b24", textDecoration: "none", fontWeight: 500 }}>Contact</Link>
         <Link to="/faq" style={{ color: "#1c2b24", textDecoration: "none", fontWeight: 500 }}>FAQ</Link>
         <Link to="/track" style={{ color: "#0d5c42", textDecoration: "none", fontWeight: 600 }}>Track Grievance</Link>
-        {!session && (
-          <Link to="/access" style={{ color: "#0d5c42", textDecoration: "none", fontWeight: 600 }}>Submit Grievance</Link>
+        {(
+          <Link to="/access" style={{ color: "#0d5c42", textDecoration: "none", fontWeight: 600, right: 0 }}>Sign-in</Link>
         )}
       </nav>
       {children}

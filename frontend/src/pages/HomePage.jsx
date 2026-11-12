@@ -49,7 +49,7 @@ export default function HomePage() {
       {/* Hero */}
       <section className="home-hero">
         <h1>നിങ്ങളുടെ ശബ്ദം, നാടിന്റെ പുരോഗതി</h1>
-        <p>മുഖ്യമന്ത്രിയുടെ പൊതുജന പരാതി പരിഹാര പോർട്ടൽ</p>
+        <p></p>
         <div className="home-hero-actions">
           <Link to="/access" className="button primary">
             Submit a Grievance

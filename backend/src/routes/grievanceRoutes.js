@@ -7,6 +7,7 @@ const multer = require("multer");
 
 const {
   getDistricts,
+  analyzeGrievance,
   createGrievance,
   getMyCitizenGrievances,
   getAllGrievances,
@@ -49,6 +50,12 @@ router.get("/districts", getDistricts);
 router.get("/track/:ref", trackGrievance);
 
 // Citizen routes
+router.post(
+  "/analyze",
+  authenticate,
+  authorize("cmo_admin"),
+  analyzeGrievance
+);
 router.get("/my", authenticate, authorize("citizen"), getMyCitizenGrievances);
 router.post("/", authenticate, authorize("citizen"), createGrievance);
 router.post("/:id/attachments", authenticate, authorize("citizen"), upload.single("file"), uploadAttachment);

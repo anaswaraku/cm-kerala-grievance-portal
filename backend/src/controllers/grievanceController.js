@@ -18,6 +18,42 @@ const getDistricts = async (req, res, next) => {
 };
 
 // ============================================================
+// POST /api/grievances/analyze  (citizen only)
+// ============================================================
+const analyzeGrievance = async (req, res, next) => {
+  const body = req.body && typeof req.body === "object" ? req.body : {};
+  const subject = String(body.subject || "").trim();
+  const description = String(body.description || "").trim();
+
+  if (!subject || !description) {
+    return res
+      .status(400)
+      .json({ message: "Subject and description are required for analysis." });
+  }
+
+  try {
+    const deptResult = await pool.query(
+      "SELECT name FROM departments WHERE is_active = TRUE ORDER BY name ASC"
+    );
+    const result = await aiService.analyzeGrievance({
+      subject,
+      description,
+      departments: deptResult.rows.map((row) => row.name),
+    });
+
+    if (!result) {
+      return res.status(503).json({
+        message: "AI analysis is currently unavailable. You can still submit your grievance.",
+      });
+    }
+
+    res.json({ status: "success", analysis: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// ============================================================
 // POST /api/grievances  (citizen only)
 // ============================================================
 const createGrievance = async (req, res, next) => {
@@ -560,6 +596,7 @@ const getGrievanceCounts = async (req, res, next) => {
 
 module.exports = {
   getDistricts,
+  analyzeGrievance,
   createGrievance,
   getMyCitizenGrievances,
   getAllGrievances,

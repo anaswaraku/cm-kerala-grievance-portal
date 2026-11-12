@@ -83,6 +83,13 @@ export const submitGrievance = (data, token) =>
     body: JSON.stringify(data),
   });
 
+export const analyzeGrievance = (data, token) =>
+  request("/api/grievances/analyze", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify(data),
+  });
+
 export const getGrievances = (token, params = {}) => {
   const qs = new URLSearchParams();
   if (params.district) qs.set("district", params.district);

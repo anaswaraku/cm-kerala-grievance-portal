@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { Fragment, useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { ROLE_TITLE } from "../auth/roles";
 import PortalFrame from "../components/PortalFrame";
@@ -10,6 +10,7 @@ import {
   getGrievanceDetail,
   getMyCitizenGrievances,
   submitGrievance,
+  analyzeGrievance,
   uploadAttachment,
   submitFeedback,
   changeGrievanceStatus,
@@ -1246,6 +1247,9 @@ function CmoDashboard({ session, signOut, message, serverError }) {
   const [appliedFilters, setAppliedFilters] = useState({});
   const [selectedGrievance, setSelectedGrievance] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [aiBusy, setAiBusy] = useState({});
+  const [aiAnalysis, setAiAnalysis] = useState({});
+  const [aiErrors, setAiErrors] = useState({});
 
   const loadGrievances = useCallback(
     (params = {}) => {
@@ -1277,10 +1281,39 @@ function CmoDashboard({ session, signOut, message, serverError }) {
     [session.token, signOut]
   );
 
+  const handleAnalyze = async (grievance) => {
+    const id = grievance.id || grievance.reference_number;
+    setAiBusy((previous) => ({ ...previous, [id]: true }));
+    setAiErrors((previous) => ({ ...previous, [id]: "" }));
+    try {
+      const response = await analyzeGrievance(
+        {
+          subject: grievance.subject,
+          description: grievance.description,
+        },
+        session.token
+      );
+      setAiAnalysis((previous) => ({ ...previous, [id]: response.analysis }));
+    } catch (err) {
+      if (err.status === 401) {
+        signOut();
+      } else {
+        setAiErrors((previous) => ({
+          ...previous,
+          [id]: err.message || "AI analysis is unavailable.",
+        }));
+      }
+    } finally {
+      setAiBusy((previous) => ({ ...previous, [id]: false }));
+    }
+  };
+
   useEffect(() => {
     getGrievanceCounts(session.token)
-      .then((data) => setCounts(data))
-      .catch(() => {});
+      .then((data) => setCounts(data.counts || data))
+      .catch((err) => {
+        if (err.status === 401) signOut();
+      });
     getDepartments()
       .then((data) => setDepartments(data.departments || []))
       .catch(() => {});
@@ -1468,42 +1501,77 @@ function CmoDashboard({ session, signOut, message, serverError }) {
                 </tr>
               </thead>
               <tbody>
-                {grievances.map((g) => (
-                  <tr
-                    key={g.reference_number}
-                    style={{
-                      background:
-                        selectedGrievance?.grievance?.reference_number ===
-                        g.reference_number
-                          ? "#f0faf3"
-                          : undefined,
-                    }}
-                  >
-                    <td style={{ ...TD, fontFamily: "monospace" }}>
-                      {g.reference_number}
-                    </td>
-                    <td style={TD}>{g.citizen_name || "—"}</td>
-                    <td style={TD}>{g.district}</td>
-                    <td style={TD}>{g.category}</td>
-                    <td style={TD}>{priorityBadge(g.priority)}</td>
-                    <td style={TD}>{statusBadge(g.status)}</td>
-                    <td style={{ ...TD, whiteSpace: "nowrap" }}>
-                      {new Date(g.created_at).toLocaleDateString("en-IN")}
-                    </td>
-                    <td style={{ ...TD, textAlign: "center" }}>
-                      {g.report_count ?? 0}
-                    </td>
-                    <td style={TD}>
-                      <button
-                        className="text-button"
-                        style={{ color: "#0d5c42", fontWeight: 600 }}
-                        onClick={() => loadDetail(g.id || g.reference_number)}
+                {grievances.map((g) => {
+                  const grievanceId = g.id || g.reference_number;
+                  return (
+                    <Fragment key={g.reference_number}>
+                      <tr
+                        style={{
+                          background:
+                            selectedGrievance?.grievance?.reference_number ===
+                            g.reference_number
+                              ? "#f0faf3"
+                              : undefined,
+                        }}
                       >
-                        View
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+                        <td style={{ ...TD, fontFamily: "monospace" }}>
+                          {g.reference_number}
+                        </td>
+                        <td style={TD}>{g.citizen_name || "—"}</td>
+                        <td style={TD}>{g.district}</td>
+                        <td style={TD}>{g.category}</td>
+                        <td style={TD}>{priorityBadge(g.priority)}</td>
+                        <td style={TD}>{statusBadge(g.status)}</td>
+                        <td style={{ ...TD, whiteSpace: "nowrap" }}>
+                          {new Date(g.created_at).toLocaleDateString("en-IN")}
+                        </td>
+                        <td style={{ ...TD, textAlign: "center" }}>
+                          {g.report_count ?? 0}
+                        </td>
+                        <td style={TD}>
+                          <button
+                            className="text-button"
+                            style={{ color: "#0d5c42", fontWeight: 600 }}
+                            onClick={() => loadDetail(grievanceId)}
+                          >
+                            View
+                          </button>
+                          <button
+                            className="text-button"
+                            style={{ color: "#2563eb", fontWeight: 600, marginLeft: "0.5rem" }}
+                            onClick={() => handleAnalyze(g)}
+                            disabled={aiBusy[grievanceId]}
+                          >
+                            {aiBusy[grievanceId] ? "Analyzing…" : "Analyze"}
+                          </button>
+                        </td>
+                      </tr>
+                      {(aiAnalysis[grievanceId] || aiErrors[grievanceId]) && (
+                        <tr>
+                          <td colSpan={9} style={{ ...TD, background: "#f7fbf8" }}>
+                            {aiErrors[grievanceId] ? (
+                              <span className="error">{aiErrors[grievanceId]}</span>
+                            ) : (
+                              <div style={{ fontSize: "0.88rem" }}>
+                                <strong>AI Analysis:</strong>{" "}
+                                {aiAnalysis[grievanceId].summary}
+                                <br />
+                                <strong>Department:</strong>{" "}
+                                {aiAnalysis[grievanceId].suggested_department}
+                                {" · "}
+                                <strong>Category:</strong>{" "}
+                                {aiAnalysis[grievanceId].suggested_category}
+                                {" · "}
+                                <strong>Priority:</strong>{" "}
+                                {aiAnalysis[grievanceId].suggested_priority}
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -1526,7 +1594,7 @@ function CmoDashboard({ session, signOut, message, serverError }) {
               loadDetail(selectedGrievance.grievance.id);
               loadGrievances(appliedFilters);
               getGrievanceCounts(session.token)
-                .then((data) => setCounts(data))
+                .then((data) => setCounts(data.counts || data))
                 .catch(() => {});
             }}
           />
@@ -1579,15 +1647,7 @@ function OfficerDashboard({ session, signOut, message, serverError }) {
     <div className="dashboard-layout">
       {/* Welcome */}
       <section className="dashboard-card">
-        <p className="eyebrow">Signed in as Department Officer</p>
-        <h1>{ROLE_TITLE["department_officer"]}</h1>
-        <p>Welcome, {session.user.name}.</p>
-        {message && <p>{message}</p>}
-        {serverError && (
-          <p className="error" role="alert">
-            {serverError}
-          </p>
-        )}
+       
       </section>
 
       {/* Grievances */}
