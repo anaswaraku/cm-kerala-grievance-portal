@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 app.get("/api/db-check", async (req, res) => {
   try {
     const result = await pool.query(
-      "SELECT current_database() AS database, NOW() AS time"
+      "SELECT current_database() AS database, NOW() AS time",
     );
 
     res.json({

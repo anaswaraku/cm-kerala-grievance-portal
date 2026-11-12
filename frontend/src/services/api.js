@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.API_URL;
 
 const request = async (path, options = {}) => {
   const response = await fetch(`${API_URL}${path}`, {
@@ -131,8 +131,7 @@ export const assignDepartment = (id, body, token) =>
     body: JSON.stringify(body),
   });
 
-export const trackGrievance = (ref) =>
-  request(`/api/grievances/track/${ref}`);
+export const trackGrievance = (ref) => request(`/api/grievances/track/${ref}`);
 
 export const uploadAttachment = (id, file, token) => {
   const formData = new FormData();
