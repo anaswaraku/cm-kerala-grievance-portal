@@ -1,0 +1,66 @@
+erDiagram
+    USERS ||--o{ GRIEVANCES : submits
+    USERS ||--o{ GRIEVANCE_HISTORY : changes
+    USERS ||--o{ DEPARTMENT_ASSIGNMENTS : assigns
+    USERS ||--o{ ATTACHMENTS : uploads
+    USERS ||--o{ ACTION_TAKEN_REPORTS : submits
+    DEPARTMENTS ||--o{ USERS : contains
+    DEPARTMENTS ||--o{ GRIEVANCES : receives
+    GRIEVANCES ||--o{ GRIEVANCE_HISTORY : records
+    GRIEVANCES ||--o{ DEPARTMENT_ASSIGNMENTS : has
+    GRIEVANCES ||--o{ ATTACHMENTS : includes
+    GRIEVANCES ||--o{ ACTION_TAKEN_REPORTS : receives
+    GRIEVANCES ||--o| CITIZEN_FEEDBACK : receives
+
+    USERS {
+        uuid id PK
+        string role
+        string name
+        string email
+        uuid department_id FK
+    }
+    DEPARTMENTS {
+        uuid id PK
+        string name UK
+        boolean is_active
+    }
+    GRIEVANCES {
+        uuid id PK
+        string reference_number UK
+        uuid citizen_id FK
+        uuid current_department_id FK
+        string status
+        string priority
+        string ai_summary
+    }
+    GRIEVANCE_HISTORY {
+        uuid id PK
+        uuid grievance_id FK
+        uuid changed_by FK
+        string new_status
+        string visibility
+    }
+    DEPARTMENT_ASSIGNMENTS {
+        uuid id PK
+        uuid grievance_id FK
+        uuid department_id FK
+        uuid assigned_officer_id FK
+    }
+    ATTACHMENTS {
+        uuid id PK
+        uuid grievance_id FK
+        uuid uploaded_by FK
+        string file_url
+    }
+    ACTION_TAKEN_REPORTS {
+        uuid id PK
+        uuid grievance_id FK
+        uuid submitted_by FK
+        string status
+    }
+    CITIZEN_FEEDBACK {
+        uuid id PK
+        uuid grievance_id FK
+        integer rating
+        string feedback
+    }

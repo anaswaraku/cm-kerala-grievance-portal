@@ -124,6 +124,7 @@ npm run dev
 | `GET` | `/api/grievances/districts` | Public | List 14 Kerala districts |
 | `GET` | `/api/grievances/track/:ref` | Public | Public grievance tracking |
 | `POST` | `/api/grievances` | Citizen | Submit new grievance |
+| `POST` | `/api/grievances/analyze` | CMO Admin | Analyze a grievance with the AI assistant |
 | `GET` | `/api/grievances/my` | Citizen | List authenticated citizen's grievances |
 | `POST` | `/api/grievances/:id/attachments` | Citizen | Upload supporting document/image |
 | `POST` | `/api/grievances/:id/feedback` | Citizen | Rate resolution (1-5 stars) and feedback |
@@ -138,3 +139,15 @@ npm run dev
 | `GET` | `/api/stats/by-district` | CMO Admin | District-wise analytics |
 | `GET` | `/api/stats/by-department` | CMO Admin | Department-wise analytics |
 | `POST` | `/api/enquiries` | Public | Submit contact enquiry |
+
+## Documentation
+
+The assignment documentation is in the [`DOCUMENTATION/`](./DOCUMENTATION/) folder:
+
+- Project overview and scope
+- System architecture
+- Database design and ER diagram
+- API documentation
+- AI integration and safeguards
+- Setup and testing
+- Citizen, CMO and officer user guide

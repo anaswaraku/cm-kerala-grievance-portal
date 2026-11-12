@@ -1,0 +1,13 @@
+flowchart LR
+    Browser["React + Vite browser app"] -->|JWT JSON / multipart requests| API["Node.js + Express REST API"]
+    API --> Auth["JWT authentication and RBAC"]
+    API --> DB[("PostgreSQL")]
+    API --> Files["Local uploads directory"]
+    API --> AI["Google Gemini API"]
+    Auth --> API
+    DB --> API
+    AI --> API
+
+    Citizen["Citizen"] --> Browser
+    CMO["CMO administrator"] --> Browser
+    Officer["Department officer"] --> Browser
