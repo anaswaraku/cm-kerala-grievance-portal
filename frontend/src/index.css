@@ -1,4 +1,126 @@
-:root { font-family: Inter, system-ui, sans-serif; color: #17231c; background: #f3f7f2; }
+:root {
+  color: #1c2b24;
+  background: #e7efe8;
+  font-family: "Segoe UI", sans-serif;
+  line-height: 1.5;
+}
+
 * { box-sizing: border-box; }
+
 body { margin: 0; min-width: 320px; }
+
+a { color: #0d5c42; }
+
 button, input { font: inherit; }
+
+h1, h2 { font-family: Georgia, "Times New Roman", serif; line-height: 1.2; }
+
+.portal-shell { min-height: 100vh; }
+
+.prototype-banner {
+  margin: 0;
+  padding: 0.55rem 1.25rem;
+  background: #1c2b24;
+  color: #f4efe4;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.portal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 8vw;
+  background: #f7faf6;
+  border-bottom: 3px solid #c4a35a;
+}
+
+.portal-header a {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.entry-layout, .auth-layout, .dashboard-layout { padding: 2.5rem 8vw 4rem; }
+
+.entry-intro { max-width: 38rem; }
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  color: #0d5c42;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.entry-card, .auth-card, .dashboard-card {
+  background: #fbfcfb;
+  border: 1px solid #d5e0d6;
+  border-radius: 18px;
+  padding: 1.4rem;
+  box-shadow: 0 12px 30px rgba(28, 43, 36, 0.06);
+}
+
+.entry-actions, .form-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.25rem; }
+
+.button, button.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #0d5c42;
+  border-radius: 999px;
+  padding: 0.7rem 1.1rem;
+  background: transparent;
+  color: #0d5c42;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button.primary, button.primary { background: #0d5c42; color: white; }
+
+button:disabled { opacity: 0.7; cursor: wait; }
+
+.text-button {
+  border: 0;
+  background: transparent;
+  color: #0d5c42;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.auth-layout { display: grid; justify-items: center; }
+
+.auth-card { width: min(100%, 30rem); display: grid; gap: 0.85rem; }
+
+.auth-card h1 { margin: 0; }
+
+label { display: grid; gap: 0.35rem; font-weight: 600; }
+
+input {
+  border: 1px solid #c5d2c7;
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  background: white;
+}
+
+.form-note, .form-links { color: #4d5d53; font-weight: 400; }
+
+.form-links { margin: 0; }
+
+.error { margin: 0; color: #8d2b2b; font-weight: 600; }
+
+.status-line { padding: 2rem 8vw; }
+
+@media (max-width: 800px) {
+  .entry-grid { grid-template-columns: 1fr; }
+  .portal-header, .entry-layout, .auth-layout, .dashboard-layout { padding-left: 1.25rem; padding-right: 1.25rem; }
+}

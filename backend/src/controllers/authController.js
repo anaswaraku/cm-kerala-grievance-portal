@@ -47,8 +47,8 @@ const register = async (req, res, next) => {
 
     const passwordHash = await bcrypt.hash(password, 12);
     const result = await pool.query(
-      `INSERT INTO users (name, email, mobile, password_hash, role)
-       VALUES ($1, $2, $3, $4, 'citizen')
+      `INSERT INTO users (name, email, mobile, password_hash, role, department_id)
+       VALUES ($1, $2, $3, $4, 'citizen', NULL)
        RETURNING id, name, email, mobile, role, department_id`,
       [name, email, mobile, passwordHash],
     );
@@ -60,6 +60,9 @@ const register = async (req, res, next) => {
       user: publicUser(user),
     });
   } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({ message: "An account already uses this email or mobile number" });
+    }
     return next(error);
   }
 };
@@ -100,9 +103,11 @@ const login = async (req, res, next) => {
 
 const me = (req, res) => res.json({ user: publicUser(req.user) });
 
+const logout = (req, res) => res.json({ message: "Signed out successfully" });
+
 const dashboard = (role) => (req, res) => res.json({
   message: `Welcome to the ${role.replace("_", " ")} dashboard`,
   user: publicUser(req.user),
 });
 
-module.exports = { register, login, me, dashboard };
+module.exports = { register, login, me, logout, dashboard };
