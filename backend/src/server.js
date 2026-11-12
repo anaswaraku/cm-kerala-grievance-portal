@@ -17,18 +17,28 @@ const allowedOrigins = [
   "https://cm-kerala-grievance-portal-steel.vercel.app",
   "https://cm-kerala-grievance-portal-bay.vercel.app",
   "https://cm-kerala-grievance-portal-nsl14l3il-anash4.vercel.app",
+  "https://cm-kerala-grievance-portal-olktqe6tj-anash4.vercel.app",
 ];
+
+const isAllowedOrigin = (origin) =>
+  !origin ||
+  allowedOrigins.includes(origin) ||
+  /^https:\/\/cm-kerala-grievance-portal-[a-z0-9]+-anash4\.vercel\.app$/.test(
+    origin,
+  );
+
+const validateOrigin = (origin, callback) => {
+  if (isAllowedOrigin(origin)) {
+    return callback(null, true);
+  }
+
+  return callback(new Error("Not allowed by CORS"));
+};
 
 // Middleware
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
-
-      return callback(new Error("Not allowed by CORS"));
-    },
+    origin: validateOrigin,
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -37,7 +47,7 @@ app.use(
 app.options(
   /.*/,
   cors({
-    origin: allowedOrigins,
+    origin: validateOrigin,
     credentials: true,
   }),
 );
