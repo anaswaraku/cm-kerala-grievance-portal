@@ -20,10 +20,17 @@ export default function HomePage() {
       <section className="about-section">
         <h1>"നമസ്കാരം"</h1>
         <h2>Welcome to the Kerala Grievance Portal</h2>
-        <p>
-          The Kerala Grievance Portal is a platform that allows citizens to</p>
+        <p>The Kerala Grievance Portal is a platform that allows citizens to</p>
         <p></p>
       </section>
+    <div className="footer">
+      <section
+        className="footer-container"
+      >
+        <Link to="/departments">Departments</Link>
+        <Link to="/contact">contact</Link>
+        <Link to="/faq">FAQ</Link>
+      </section></div>
     </main>
   );
 }

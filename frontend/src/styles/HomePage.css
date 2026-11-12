@@ -166,3 +166,106 @@
     font-size: clamp(2.4rem, 13vw, 3.55rem);
   }
 }
+
+.footer {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 76rem);
+  margin: 2rem auto 0;
+  padding: 1.35rem clamp(1.25rem, 3vw, 2.25rem);
+  overflow: hidden;
+  border: 1px solid rgba(196, 163, 90, 0.55);
+  border-radius: 16px;
+  background: #183d2b;
+  box-shadow: 0 15px 32px rgba(17, 58, 36, 0.16);
+  color: #f5f7f0;
+}
+
+.footer::before {
+  position: absolute;
+  top: -5rem;
+  right: -3rem;
+  width: 13rem;
+  height: 13rem;
+  border: 1px solid rgba(196, 163, 90, 0.35);
+  border-radius: 50%;
+  content: "";
+  box-shadow: 0 0 0 1.7rem rgba(196, 163, 90, 0.07);
+}
+
+.footer-container {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem 0.65rem;
+  max-width: 68rem;
+  margin: auto;
+}
+
+.footer-logo {
+  margin-right: auto;
+  color: #fff8e6;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.65rem;
+}
+
+.footer-container > a,
+.footer-links a {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #e7f0e9;
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
+}
+
+.footer-container > a:hover,
+.footer-container > a:focus-visible,
+.footer-links a:hover,
+.footer-links a:focus-visible {
+  border-color: rgba(231, 208, 142, 0.7);
+  outline: none;
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff8d9;
+}
+
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  margin-top: 1.15rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(231, 240, 233, 0.2);
+  color: #c5d6c9;
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .footer {
+    margin-top: 1rem;
+    border-radius: 12px;
+  }
+
+  .footer-container,
+  .footer-links {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .footer-logo {
+    width: 100%;
+    margin-right: 0;
+  }
+}

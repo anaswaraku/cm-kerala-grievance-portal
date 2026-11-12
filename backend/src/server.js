@@ -4,7 +4,7 @@ require("dotenv").config();
 
 const pool = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
-
+const departmentRoutes = require("./routes/departmentRoutes");
 const app = express();
 
 // Middleware
@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/departments", departmentRoutes);
 
 // Test API
 app.get("/", (req, res) => {
@@ -51,7 +52,28 @@ app.use((error, req, res, next) => {
   console.error("Unhandled request error:", error.message);
   res.status(500).json({ message: "An unexpected server error occurred" });
 });
+app.get("/api/departments", async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT id, name, description, contact_email, contact_phone
+       FROM departments
+       WHERE is_active = TRUE
+       ORDER BY name`,
+    );
 
+    res.json({
+      status: "success",
+      departments: result.rows,
+    });
+  } catch (error) {
+    console.error("Department retrieval error:", error.message);
+
+    res.status(500).json({
+      status: "error",
+      message: "Could not retrieve departments",
+    });
+  }
+});
 // Server
 const PORT = process.env.PORT || 5000;
 

@@ -33,6 +33,9 @@ export const logoutRequest = (token) => request("/api/auth/logout", {
   headers: { Authorization: `Bearer ${token}` },
 });
 
+
+export const getDepartments = () => request("/api/departments");
+
 const dashboardPath = {
   citizen: "/api/auth/dashboard/citizen",
   cmo_admin: "/api/auth/dashboard/cmo",
