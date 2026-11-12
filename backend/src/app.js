@@ -13,9 +13,30 @@ const pool = require("./config/db");
 
 const app = express();
 
+const allowedOrigins = [
+  "https://cm-kerala-grievance-portal-steel.vercel.app",
+  "https://cm-kerala-grievance-portal-bay.vercel.app",
+  "https://cm-kerala-grievance-portal-nsl14l3il-anash4.vercel.app",
+];
+
 app.use(
   cors({
-    origin: ["https://cm-kerala-grievance-portal-steel.vercel.app"],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
+);
+app.options(
+  /.*/,
+  cors({
+    origin: allowedOrigins,
     credentials: true,
   }),
 );

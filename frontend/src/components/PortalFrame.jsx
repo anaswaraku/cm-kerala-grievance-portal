@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
+import logo from "../assets/logo.png";
 
 export default function PortalFrame({ action, children }) {
   const { session } = useAuth();
@@ -8,7 +9,7 @@ export default function PortalFrame({ action, children }) {
       <p className="prototype-banner">Recruitment prototype — Not an official Government of Kerala service</p>
       <header className="portal-header">
         <Link to="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "inherit" }}>
-          <img src="/src/assets/logo.png" alt="Kerala emblem" height="40" />
+          <img src={logo} alt="Kerala emblem" height="40" />
           <span style={{ fontWeight: 700 }}>Kerala CM Grievance Portal</span>
         </Link>
         <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
