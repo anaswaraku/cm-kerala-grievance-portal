@@ -9,6 +9,16 @@ const getDistricts = async (req, res, next) => {
     next(error);
   }
 };
+const getGrievances = async (req, res, next) => {
+  try {
+    const result = await pool.query(
+      "SELECT reference_number,citizen_id,district,category,subject,description,created_at,updated_at,resolved_at FROM grievances ORDER BY created_at ASC",
+    );
+    res.json({ status: "success", grievances: result.rows });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // 2. Save grievance
 const createGrievance = async (req, res, next) => {
@@ -51,4 +61,4 @@ const createGrievance = async (req, res, next) => {
   }
 };
 
-module.exports = { getDistricts, createGrievance };
+module.exports = { getDistricts, getGrievances, createGrievance };

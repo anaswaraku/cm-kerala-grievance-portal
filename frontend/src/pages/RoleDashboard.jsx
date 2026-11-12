@@ -2,7 +2,12 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { ROLE_TITLE } from "../auth/roles";
 import PortalFrame from "../components/PortalFrame";
-import { getRoleDashboard, getDistricts, submitGrievance } from "../services/api";
+import {
+  getRoleDashboard,
+  getDistricts,
+  getGrievances,
+  submitGrievance,
+} from "../services/api";
 
 const GRIEVANCE_CATEGORIES = [
   "Roads & Public Infrastructure",
@@ -40,6 +45,9 @@ export default function RoleDashboard({ role }) {
   const [formBusy, setFormBusy] = useState(false);
   const [formError, setFormError] = useState("");
   const [formSuccess, setFormSuccess] = useState("");
+  const [grievances, setGrievances] = useState([]);
+  const [grievancesLoading, setGrievancesLoading] = useState(false);
+  const [grievancesError, setGrievancesError] = useState("");
 
   useEffect(() => {
     let active = true;
@@ -64,6 +72,22 @@ export default function RoleDashboard({ role }) {
         })
         .finally(() => {
           if (active) setDistrictsLoading(false);
+        });
+    }
+
+    if (role === "cmo_admin") {
+      setGrievancesLoading(true);
+      getGrievances(session.token)
+        .then((data) => {
+          if (active) setGrievances(data.grievances || []);
+        })
+        .catch((requestError) => {
+          if (!active) return;
+          if (requestError.status === 401) signOut();
+          else setGrievancesError(requestError.message);
+        })
+        .finally(() => {
+          if (active) setGrievancesLoading(false);
         });
     }
 
@@ -260,6 +284,50 @@ export default function RoleDashboard({ role }) {
                 {formBusy ? "Submitting…" : "Save Grievance"}
               </button>
             </form>
+          </section>
+        )}
+        {role === "cmo_admin" && (
+          <section className="dashboard-card" style={{ marginTop: "1.5rem", maxWidth: "none" }}>
+            <h2>Submitted Grievances</h2>
+            {grievancesLoading && <p>Loading grievances…</p>}
+            {grievancesError && (
+              <p className="error" role="alert">{grievancesError}</p>
+            )}
+            {!grievancesLoading && !grievancesError && grievances.length === 0 && (
+              <p>No grievances have been submitted yet.</p>
+            )}
+            {!grievancesLoading && !grievancesError && grievances.length > 0 && (
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "58rem" }}>
+                  <thead>
+                    <tr>
+                      <th scope="col">Reference</th>
+                      <th scope="col">District</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Subject</th>
+                      <th scope="col">Description</th>
+                      <th scope="col">Submitted</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {grievances.map((grievance) => (
+                      <tr key={grievance.reference_number}>
+                        <td>{grievance.reference_number}</td>
+                        <td>{grievance.district}</td>
+                        <td>{grievance.category}</td>
+                        <td>{grievance.subject}</td>
+                        <td>{grievance.description}</td>
+                        <td>
+                          {grievance.created_at
+                            ? new Date(grievance.created_at).toLocaleString()
+                            : "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </section>
         )}
       </main>

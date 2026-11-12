@@ -50,6 +50,10 @@ export const submitGrievance = (data, token) =>
     body: JSON.stringify(data),
   });
 
+export const getGrievances = (token) => request("/api/grievances", {
+  headers: { Authorization: `Bearer ${token}` },
+});
+
 const dashboardPath = {
   citizen: "/api/auth/dashboard/citizen",
   cmo_admin: "/api/auth/dashboard/cmo",
