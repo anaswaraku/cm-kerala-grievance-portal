@@ -3,12 +3,15 @@ const cors = require("cors");
 require("dotenv").config();
 
 const pool = require("./config/db");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+app.use("/api/auth", authRoutes);
 
 // Test API
 app.get("/", (req, res) => {
@@ -38,6 +41,15 @@ app.get("/api/db-check", async (req, res) => {
             message: "PostgreSQL connection failed"
         });
     }
+});
+
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+app.use((error, req, res, next) => {
+  console.error("Unhandled request error:", error.message);
+  res.status(500).json({ message: "An unexpected server error occurred" });
 });
 
 // Server
